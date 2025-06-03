@@ -3,20 +3,25 @@ async function onMagicButtonClick() {
     if (currentTab) {
         // Get current tab html content
         console.log('Current tab ID:', currentTab.id);
-        const [{ result }] = await chrome.scripting.executeScript({
+        const [{ result: paragraphs }] = await chrome.scripting.executeScript({
             target: { tabId: currentTab.id },
             func: () => {
                 // This function will run in the context of the current tab
-                const htmlContent = document.documentElement.outerHTML;
-                return htmlContent;
+                const paragraphs = Array.from(document.getElementsByTagName('p'))
+                    .map(p => p.innerText.trim())
+                    .filter(text => text.length > 0);
+                return paragraphs;
                 // You can do something with the HTML content here
             }
         });
         // Print result in the new section
         const resultDiv = document.getElementById('magic-result');
+        console.log('paragraphs:', paragraphs);
         if (resultDiv) {
-            if (result && result.trim()) {
-                resultDiv.textContent = result;
+            if (paragraphs) {
+                const response = await fetch('http://localhost:3001/get-insights', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ htmlContent: paragraphs }) });
+                const insights = await response.json();
+                resultDiv.textContent = insights.result;
                 resultDiv.classList.add('has-data');
             } else {
                 resultDiv.textContent = '';
