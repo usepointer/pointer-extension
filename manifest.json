@@ -1,0 +1,27 @@
+{
+    "name": "Web insights",
+    "version": "1.0",
+    "manifest_version": 3,
+    "description": "Magicily tarnsform loads of text into insights",
+    "permissions": [
+        "sidePanel",
+        "scripting"
+    ],
+    "host_permissions": [
+        "https://*/*"
+    ],
+    "background": {
+        "service_worker": "dist/background.js"
+    },
+    "side_panel": {
+        "default_path": "sidepanel/index.html"
+    },
+    "commands": {
+        "toggle-side-panel": {
+            "suggested_key": {
+                "mac": "Command+B"
+            },
+            "description": "Open the Web Insights side panel"
+        }
+    }
+}
