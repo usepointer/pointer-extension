@@ -10,6 +10,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function onMagicButtonClick() {
     return __awaiter(this, void 0, void 0, function* () {
+        const resultDiv = document.getElementById('magic-result');
+        let loadingDiv = document.getElementById('magic-loading');
+        // Create loadingDiv if it doesn't exist
+        if (!loadingDiv) {
+            loadingDiv = document.createElement('div');
+            loadingDiv.id = 'magic-loading';
+            loadingDiv.className = 'loading-container';
+            const spinner = document.createElement('div');
+            spinner.className = 'spinner';
+            loadingDiv.appendChild(spinner);
+            // Optionally add loading text
+            const loadingText = document.createElement('div');
+            loadingText.className = 'loading-text';
+            loadingText.textContent = 'Magic takes time...';
+            loadingDiv.appendChild(loadingText);
+            // Insert loadingDiv before resultDiv
+            if (resultDiv && resultDiv.parentNode) {
+                resultDiv.parentNode.insertBefore(loadingDiv, resultDiv);
+            }
+        }
+        // Show loadingDiv, hide resultDiv
+        if (loadingDiv)
+            loadingDiv.style.display = 'flex';
+        if (resultDiv) {
+            resultDiv.style.display = 'none';
+            resultDiv.textContent = '';
+            resultDiv.classList.remove('has-data');
+            resultDiv.classList.remove('loading');
+        }
         const currentTab = yield getCurrentTab();
         if (currentTab) {
             // Get current tab html content
@@ -26,20 +55,30 @@ function onMagicButtonClick() {
                 }
             });
             // Print result in the new section
-            const resultDiv = document.getElementById('magic-result');
-            console.log('paragraphs:', paragraphs);
-            if (resultDiv) {
+            if (resultDiv && loadingDiv) {
                 if (paragraphs) {
                     const response = yield fetch('http://localhost:3001/get-insights', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ htmlContent: paragraphs }) });
                     const insights = yield response.json();
-                    resultDiv.textContent = insights.result;
+                    resultDiv.innerHTML = insights.result;
                     resultDiv.classList.add('has-data');
+                    resultDiv.classList.remove('loading');
+                    resultDiv.style.display = '';
+                    loadingDiv.style.display = 'none';
                 }
                 else {
                     resultDiv.textContent = '';
                     resultDiv.classList.remove('has-data');
+                    resultDiv.classList.remove('loading');
+                    resultDiv.style.display = '';
+                    loadingDiv.style.display = 'none';
                 }
             }
+        }
+        else if (resultDiv && loadingDiv) {
+            resultDiv.textContent = '';
+            resultDiv.classList.remove('loading');
+            resultDiv.style.display = '';
+            loadingDiv.style.display = 'none';
         }
     });
 }
