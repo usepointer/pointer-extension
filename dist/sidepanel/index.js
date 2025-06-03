@@ -43,21 +43,24 @@ function onMagicButtonClick() {
         if (currentTab) {
             // Get current tab html content
             console.log('Current tab ID:', currentTab.id);
-            const [{ result: paragraphs }] = yield chrome.scripting.executeScript({
+            const [{ result: contents }] = yield chrome.scripting.executeScript({
                 target: { tabId: currentTab.id },
                 func: () => {
                     // This function will run in the context of the current tab
                     const paragraphs = Array.from(document.getElementsByTagName('p'))
                         .map(p => p.innerText.trim())
                         .filter(text => text.length > 0);
-                    return paragraphs;
+                    const spans = Array.from(document.getElementsByTagName('span'))
+                        .map(p => p.innerText.trim())
+                        .filter(text => text.length > 0);
+                    return [...paragraphs, spans];
                     // You can do something with the HTML content here
                 }
             });
             // Print result in the new section
             if (resultDiv && loadingDiv) {
-                if (paragraphs) {
-                    const response = yield fetch('http://localhost:3001/get-insights', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ htmlContent: paragraphs }) });
+                if (contents) {
+                    const response = yield fetch('http://localhost:3001/get-insights', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ htmlContent: contents }) });
                     const insights = yield response.json();
                     resultDiv.innerHTML = insights.result;
                     resultDiv.classList.add('has-data');
