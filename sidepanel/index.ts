@@ -1,3 +1,5 @@
+import { marked } from 'marked'
+
 async function onMagicButtonClick() {
     const resultDiv = document.getElementById('magic-result');
     let loadingDiv = document.getElementById('magic-loading');
@@ -50,7 +52,7 @@ async function onMagicButtonClick() {
             if (contents) {
                 const response = await fetch('http://localhost:3001/get-insights', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ htmlContent: contents }) });
                 const insights = await response.json();
-                resultDiv.innerHTML = insights.result;
+                resultDiv.innerHTML = await marked.parse(insights.result);
                 resultDiv.classList.add('has-data');
                 resultDiv.classList.remove('loading');
                 resultDiv.style.display = '';
