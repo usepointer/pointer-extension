@@ -1,9 +1,7 @@
 import { marked } from 'marked'
 
-async function onMagicButtonClick() {
-    const resultDiv = document.getElementById('magic-result');
+function showLoader(resultDiv: HTMLElement | null): HTMLElement {
     let loadingDiv = document.getElementById('magic-loading');
-    // Create loadingDiv if it doesn't exist
     if (!loadingDiv) {
         loadingDiv = document.createElement('div');
         loadingDiv.id = 'magic-loading';
@@ -11,24 +9,35 @@ async function onMagicButtonClick() {
         const spinner = document.createElement('div');
         spinner.className = 'spinner';
         loadingDiv.appendChild(spinner);
-        // Optionally add loading text
         const loadingText = document.createElement('div');
         loadingText.className = 'loading-text';
         loadingText.textContent = 'Magic takes time...';
         loadingDiv.appendChild(loadingText);
-        // Insert loadingDiv before resultDiv
         if (resultDiv && resultDiv.parentNode) {
             resultDiv.parentNode.insertBefore(loadingDiv, resultDiv);
         }
     }
-    // Show loadingDiv, hide resultDiv
-    if (loadingDiv) loadingDiv.style.display = 'flex';
+    loadingDiv.style.display = 'flex';
+    return loadingDiv;
+}
+
+function hideLoader(loadingDiv: HTMLElement | null) {
+    if (loadingDiv) loadingDiv.style.display = 'none';
+}
+
+function resetResultDiv(resultDiv: HTMLElement | null) {
     if (resultDiv) {
         resultDiv.style.display = 'none';
         resultDiv.textContent = '';
         resultDiv.classList.remove('has-data');
         resultDiv.classList.remove('loading');
     }
+}
+
+async function onMagicButtonClick() {
+    const resultDiv = document.getElementById('magic-result');
+    const loadingDiv = showLoader(resultDiv);
+    resetResultDiv(resultDiv);
     const currentTab = await getCurrentTab();
     if (currentTab) {
         // Get current tab html content
@@ -56,20 +65,20 @@ async function onMagicButtonClick() {
                 resultDiv.classList.add('has-data');
                 resultDiv.classList.remove('loading');
                 resultDiv.style.display = '';
-                loadingDiv.style.display = 'none';
+                hideLoader(loadingDiv);
             } else {
                 resultDiv.textContent = '';
                 resultDiv.classList.remove('has-data');
                 resultDiv.classList.remove('loading');
                 resultDiv.style.display = '';
-                loadingDiv.style.display = 'none';
+                hideLoader(loadingDiv);
             }
         }
     } else if (resultDiv && loadingDiv) {
         resultDiv.textContent = '';
         resultDiv.classList.remove('loading');
         resultDiv.style.display = '';
-        loadingDiv.style.display = 'none';
+        hideLoader(loadingDiv);
     }
 }
 
