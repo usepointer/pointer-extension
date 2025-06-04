@@ -11,7 +11,7 @@
         "https://*/*"
     ],
     "background": {
-        "service_worker": "dist/background.js"
+        "service_worker": "scripts/background.js"
     },
     "side_panel": {
         "default_path": "sidepanel/index.html"

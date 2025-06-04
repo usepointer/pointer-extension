@@ -8,11 +8,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
+    "build": "vite build && tsc"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.326",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-static-copy": "^3.0.0"
   },
   "dependencies": {
     "marked": "^15.0.12"
