@@ -77,8 +77,10 @@ async function onMagicButtonClick() {
                 resultDiv.classList.add('has-data');
                 resultDiv.classList.remove('loading');
                 resultDiv.style.display = '';
+                hideLoader(loadingDiv); // Remove loader as soon as stream starts
                 // Read the stream chunk by chunk
                 let resultText = '';
+                let lastLength = 0;
                 while (true) {
                     const { value, done } = await reader.read();
                     if (done) break;
@@ -91,8 +93,20 @@ async function onMagicButtonClick() {
                             const data = event.replace(/^data:/, '').trim();
                             if (data === '[DONE]') continue;
                             // Append streamed markdown
-                            resultText += JSON.parse(data).v;
+                            const newText = JSON.parse(data).v;
+                            resultText += newText;
+                            // Parse the full markdown and set innerHTML
                             resultDiv.innerHTML = await marked.parse(resultText);
+                            // Animate only the new content
+                            const childNodes = Array.from(resultDiv.childNodes);
+                            for (let i = lastLength; i < childNodes.length; i++) {
+                                const el = childNodes[i];
+                                if (el.nodeType === Node.ELEMENT_NODE) {
+                                    (el as HTMLElement).classList.add('text-animate');
+                                }
+                            }
+                            lastLength = childNodes.length;
+                            resultDiv.scrollTop = resultDiv.scrollHeight;
                         }
                     }
                 }
