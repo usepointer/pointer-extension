@@ -95,7 +95,6 @@ async function streamAndRenderMarkdown(response: Response, resultDiv: HTMLElemen
                     }
                 }
                 lastLength = childNodes.length;
-                resultDiv.scrollTop = resultDiv.scrollHeight;
             }
         }
     }
