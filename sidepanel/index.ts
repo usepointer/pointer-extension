@@ -59,12 +59,43 @@ async function onMagicButtonClick() {
         // Print result in the new section
         if (resultDiv && loadingDiv) {
             if (contents) {
-                const response = await fetch('http://localhost:3001/get-insights', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ htmlContent: contents }) });
-                const insights = await response.json();
-                resultDiv.innerHTML = await marked.parse(insights.result);
+                // Use fetch with 'text/event-stream' and stream the response
+                const response = await fetch('http://localhost:3001/get-insights', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
+                    body: JSON.stringify({ htmlContent: contents })
+                });
+                if (!response.body) {
+                    resultDiv.textContent = 'No response body.';
+                    hideLoader(loadingDiv);
+                    return;
+                }
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let buffer = '';
+                resultDiv.innerHTML = '';
                 resultDiv.classList.add('has-data');
                 resultDiv.classList.remove('loading');
                 resultDiv.style.display = '';
+                // Read the stream chunk by chunk
+                let resultText = '';
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    // Split on double newlines (event-stream format)
+                    const events = buffer.split('\n\n');
+                    buffer = events.pop() || '';
+                    for (const event of events) {
+                        if (event.startsWith('data:')) {
+                            const data = event.replace(/^data:/, '').trim();
+                            if (data === '[DONE]') continue;
+                            // Append streamed markdown
+                            resultText += JSON.parse(data).v;
+                            resultDiv.innerHTML = await marked.parse(resultText);
+                        }
+                    }
+                }
                 hideLoader(loadingDiv);
             } else {
                 resultDiv.textContent = '';
