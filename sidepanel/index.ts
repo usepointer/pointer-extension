@@ -113,6 +113,8 @@ async function onMagicButtonClick() {
     const resultDiv = document.getElementById('magic-result');
     const loadingDiv = showLoader(resultDiv);
     resetResultDiv(resultDiv);
+    const customPromptInput = document.getElementById('custom-prompt') as HTMLTextAreaElement | null;
+    const customPrompt = customPromptInput ? customPromptInput.value : '';
     const currentTab = await getCurrentTab();
     if (!currentTab) {
         if (resultDiv && loadingDiv) await handleNoContent(resultDiv, loadingDiv);
@@ -128,7 +130,7 @@ async function onMagicButtonClick() {
             const response = await fetch('http://localhost:3001/get-insights', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
-                body: JSON.stringify({ htmlContent: contents })
+                body: JSON.stringify({ htmlContent: contents, customPrompt })
             });
             await streamAndRenderMarkdown(response, resultDiv, loadingDiv);
         } else {
