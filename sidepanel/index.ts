@@ -23,7 +23,7 @@ function extractTabContent() {
     const spans = Array.from(document.getElementsByTagName('span'))
         .map(p => p.innerText.trim())
         .filter(text => text.length > 0);
-    return [...paragraphs, spans];
+    return [...paragraphs, ...spans];
 }
 
 // Streaming and rendering helpers
