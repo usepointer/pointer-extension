@@ -1,39 +1,8 @@
 import { marked } from 'marked'
 
-// Loader UI helpers
-function createLoader(): HTMLElement {
-    const loadingDiv = document.createElement('div');
-    loadingDiv.id = 'magic-loading';
-    loadingDiv.className = 'loading-container';
-    const spinner = document.createElement('div');
-    spinner.className = 'spinner';
-    loadingDiv.appendChild(spinner);
-    const loadingText = document.createElement('div');
-    loadingText.className = 'loading-text';
-    loadingText.textContent = 'Magic takes time...';
-    loadingDiv.appendChild(loadingText);
-    return loadingDiv;
-}
-
-function showLoader(resultDiv: HTMLElement | null): HTMLElement {
-    let loadingDiv = document.getElementById('magic-loading');
-    if (!loadingDiv) {
-        loadingDiv = createLoader();
-        if (resultDiv && resultDiv.parentNode) {
-            resultDiv.parentNode.insertBefore(loadingDiv, resultDiv);
-        }
-    }
-    loadingDiv.style.display = 'flex';
-    return loadingDiv;
-}
-
-function hideLoader(loadingDiv: HTMLElement | null) {
-    if (loadingDiv) loadingDiv.style.display = 'none';
-}
-
 function resetResultDiv(resultDiv: HTMLElement | null) {
     if (resultDiv) {
-        resultDiv.style.display = 'none';
+        resultDiv.style.display = '';
         resultDiv.textContent = '';
         resultDiv.classList.remove('has-data', 'loading');
     }
@@ -58,10 +27,9 @@ function extractTabContent() {
 }
 
 // Streaming and rendering helpers
-async function streamAndRenderMarkdown(response: Response, resultDiv: HTMLElement, loadingDiv: HTMLElement) {
+async function streamAndRenderMarkdown(response: Response, resultDiv: HTMLElement) {
     if (!response.body) {
         resultDiv.textContent = 'No response body.';
-        hideLoader(loadingDiv);
         return;
     }
     const reader = response.body.getReader();
@@ -71,7 +39,6 @@ async function streamAndRenderMarkdown(response: Response, resultDiv: HTMLElemen
     resultDiv.classList.add('has-data');
     resultDiv.classList.remove('loading');
     resultDiv.style.display = '';
-    hideLoader(loadingDiv);
     let resultText = '';
     let lastLength = 0;
     while (true) {
@@ -98,26 +65,23 @@ async function streamAndRenderMarkdown(response: Response, resultDiv: HTMLElemen
             }
         }
     }
-    hideLoader(loadingDiv);
 }
 
-async function handleNoContent(resultDiv: HTMLElement, loadingDiv: HTMLElement) {
+async function handleNoContent(resultDiv: HTMLElement) {
     resultDiv.textContent = '';
     resultDiv.classList.remove('has-data', 'loading');
     resultDiv.style.display = '';
-    hideLoader(loadingDiv);
 }
 
 // Main event handler
 async function onMagicButtonClick() {
     const resultDiv = document.getElementById('magic-result');
-    const loadingDiv = showLoader(resultDiv);
     resetResultDiv(resultDiv);
     const customPromptInput = document.getElementById('custom-prompt') as HTMLTextAreaElement | null;
     const customPrompt = customPromptInput ? customPromptInput.value : '';
     const currentTab = await getCurrentTab();
     if (!currentTab) {
-        if (resultDiv && loadingDiv) await handleNoContent(resultDiv, loadingDiv);
+        if (resultDiv) await handleNoContent(resultDiv);
         return;
     }
     // Get current tab html content
@@ -125,16 +89,16 @@ async function onMagicButtonClick() {
         target: { tabId: currentTab.id },
         func: extractTabContent
     });
-    if (resultDiv && loadingDiv) {
+    if (resultDiv) {
         if (contents) {
             const response = await fetch('http://localhost:3001/get-insights', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
                 body: JSON.stringify({ htmlContent: contents, customPrompt })
             });
-            await streamAndRenderMarkdown(response, resultDiv, loadingDiv);
+            await streamAndRenderMarkdown(response, resultDiv);
         } else {
-            await handleNoContent(resultDiv, loadingDiv);
+            await handleNoContent(resultDiv);
         }
     }
 }
