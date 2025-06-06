@@ -91,7 +91,7 @@ async function onMagicButtonClick() {
     });
     if (resultDiv) {
         if (contents) {
-            const response = await fetch('http://localhost:3001/get-insights', {
+            const response = await fetch('http://localhost:3001/insights', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
                 body: JSON.stringify({ htmlContent: contents, customPrompt })
