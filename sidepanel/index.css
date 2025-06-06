@@ -45,11 +45,12 @@ body {
 #magic-result {
     display: none;
     flex: 1 1 auto;
-    margin: 1.5em;
+    margin: 1.5em 1.5em 1em 1.5em;
     border: none;
     border-radius: 14px;
     box-shadow: none;
     padding: 1em;
+    padding-bottom: 2.5em;
     background: #23272f;
     color: #f3f6fa;
     font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
@@ -80,6 +81,12 @@ body {
   justify-content: center;
   min-height: 60px;
   width: 100%;
+  /* Center absolutely in parent */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
 }
 .spinner {
   width: 32px;
@@ -124,12 +131,12 @@ body {
   border: 1px solid #333;
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   font-size: 1.25em;
-  padding: 0.75em;
+  padding: 1.1em;
   margin-bottom: 0.5em;
   width: 100%;
-  height: 3em;
-  min-height: 3em;
-  max-height: 3em;
+  height: 4.5em;
+  min-height: 4.5em;
+  max-height: 6em;
   resize: none;
   box-shadow: 0 1px 2px rgba(0,0,0,0.25);
 }
