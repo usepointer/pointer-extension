@@ -16,7 +16,39 @@ async function getCurrentTab() {
 }
 
 // Content extraction for the current tab
-function extractTabContent() {
+function extractTabHTMLContent() {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(document.body.outerHTML, 'text/html');
+
+    ['script', 'svg', 'style'].forEach(tag => {
+        doc.querySelectorAll(tag).forEach(el => el.remove());
+    });
+
+    doc.querySelectorAll('*').forEach(el => {
+        [...el.attributes].forEach(attr => {
+            if (attr.name !== 'id') {
+                el.removeAttribute(attr.name);
+            }
+        });
+    });
+    const outerHTML = doc.documentElement.outerHTML;
+    return outerHTML
+        .replace(/\n/g, '')
+        .replace(/\t/g, '')
+        .replace(/<div/g, '<d')
+        .replace(/<\/div>/g, '</d>')
+        .replace(/<span/g, '<s')
+        .replace(/<\/span>/g, '</s>')
+    // const paragraphs = Array.from(document.getElementsByTagName('p'))
+    //     .map(p => p.innerText.trim())
+    //     .filter(text => text.length > 0);
+    // const spans = Array.from(document.getElementsByTagName('span'))
+    //     .map(p => p.innerText.trim())
+    //     .filter(text => text.length > 0);
+    // return [...paragraphs, ...spans];
+}
+
+function extractTabTextContent() {
     const paragraphs = Array.from(document.getElementsByTagName('p'))
         .map(p => p.innerText.trim())
         .filter(text => text.length > 0);
@@ -25,7 +57,6 @@ function extractTabContent() {
         .filter(text => text.length > 0);
     return [...paragraphs, ...spans];
 }
-
 // Streaming and rendering helpers
 async function streamAndRenderMarkdown(response: Response, resultDiv: HTMLElement) {
     if (!response.body) {
@@ -87,7 +118,7 @@ async function onMagicButtonClick() {
     // Get current tab html content
     const [{ result: contents }] = await chrome.scripting.executeScript({
         target: { tabId: currentTab.id },
-        func: extractTabContent
+        func: extractTabTextContent
     });
     if (resultDiv) {
         if (contents) {
