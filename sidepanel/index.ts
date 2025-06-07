@@ -104,15 +104,29 @@ async function handleNoContent(resultDiv: HTMLElement) {
     resultDiv.style.display = '';
 }
 
+function setButtonLoadingState(isLoading: boolean) {
+    const btn = document.getElementById('magic-btn') as HTMLButtonElement | null;
+    if (!btn) return;
+    const loadingDots = btn.querySelector('.loading-dots') as HTMLElement | null;
+    const wandIcon = btn.querySelector('img') as HTMLElement | null;
+    const btnText = btn.querySelector('.btn-text') as HTMLElement | null;
+    if (loadingDots) loadingDots.style.display = isLoading ? 'inline-block' : 'none';
+    if (wandIcon) wandIcon.style.display = isLoading ? 'none' : '';
+    if (btnText) btnText.style.display = isLoading ? 'none' : '';
+    btn.disabled = isLoading;
+}
+
 // Main event handler
 async function onMagicButtonClick() {
     const resultDiv = document.getElementById('magic-result');
+    setButtonLoadingState(true);
     resetResultDiv(resultDiv);
     const customPromptInput = document.getElementById('custom-prompt') as HTMLTextAreaElement | null;
     const customPrompt = customPromptInput ? customPromptInput.value : '';
     const currentTab = await getCurrentTab();
     if (!currentTab) {
         if (resultDiv) await handleNoContent(resultDiv);
+        setButtonLoadingState(false);
         return;
     }
     // Get current tab html content
@@ -132,6 +146,7 @@ async function onMagicButtonClick() {
             await handleNoContent(resultDiv);
         }
     }
+    setButtonLoadingState(false);
 }
 
 // DOM event binding

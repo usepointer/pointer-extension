@@ -48,6 +48,39 @@ body {
   filter: brightness(1.2) invert(0.85);
 }
 
+#magic-btn .loading-dots {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+  font-size: 1.2em;
+  letter-spacing: 2px;
+}
+
+#magic-btn .dot {
+  opacity: 0.3;
+  animation: blink 1.4s infinite both;
+}
+
+#magic-btn .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+#magic-btn .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.3;
+  }
+
+  40% {
+    opacity: 1;
+  }
+}
+
 #magic-result {
   /* display: none; */
   flex: 1 1 auto;
