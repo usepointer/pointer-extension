@@ -8,7 +8,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "vite build --mode dev && tsc"
+    "build": "vite build --mode dev && tsc",
+    "build:prod": "vite build --mode prod && tsc"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.326",

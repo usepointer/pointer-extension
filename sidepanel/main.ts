@@ -2,6 +2,8 @@ import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButto
 import { getCurrentTab, extractTabTextContent } from './tabUtils';
 import { streamAndRenderMarkdown } from './streamUtils';
 
+const backendHost = import.meta.env.VITE_BACKEND_HOST
+
 // Main event handler
 async function onMagicButtonClick() {
     const resultDiv = document.getElementById('magic-result');
@@ -22,7 +24,7 @@ async function onMagicButtonClick() {
     });
     if (resultDiv) {
         if (contents) {
-            const response = await fetch('http://localhost:3001/insights', {
+            const response = await fetch(`${backendHost}/insights`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
                 body: JSON.stringify({ htmlContent: contents, customPrompt })
