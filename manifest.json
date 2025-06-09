@@ -2,7 +2,7 @@
     "name": "Pointer Assistant",
     "version": "1.0",
     "manifest_version": 3,
-    "description": "Magicily tarnsform loads of text into insights",
+    "description": "Summarize articles, query documentation, and extract data from any webpage. Pointer helps you find exactly what you need, instantly.",
     "permissions": [
         "sidePanel",
         "scripting"
