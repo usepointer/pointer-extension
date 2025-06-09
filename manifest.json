@@ -5,10 +5,8 @@
     "description": "Summarize articles, query documentation, and extract data from any webpage. Pointer helps you find exactly what you need, instantly.",
     "permissions": [
         "sidePanel",
-        "scripting"
-    ],
-    "host_permissions": [
-        "https://*/*"
+        "scripting",
+        "activeTab"
     ],
     "background": {
         "service_worker": "scripts/background.js"
