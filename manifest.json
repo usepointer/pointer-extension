@@ -19,7 +19,8 @@
     "commands": {
         "toggle-side-panel": {
             "suggested_key": {
-                "mac": "Command+B"
+                "mac": "Command+B",
+                "windows": "Ctrl+B"
             },
             "description": "Open the Pointer side panel"
         }
