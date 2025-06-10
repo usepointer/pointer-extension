@@ -345,3 +345,65 @@ body {
     color: #e6e6e6;
   }
 }
+
+/* Light mode support */
+@media (prefers-color-scheme: light) {
+  body {
+    background: #f7f8fa;
+    color: #23272f;
+  }
+
+  #magic-result {
+    background: #fff;
+    color: #23272f;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  #custom-prompt {
+    background: #f3f6fa !important;
+    color: #23272f !important;
+    border: 2px solid #d1d5db !important;
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    font-size: 1.15em;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+
+  label[for="custom-prompt"] {
+    color: #23272f;
+  }
+
+  .loading-container {
+    background: #f7f8fa;
+    color: #23272f;
+  }
+
+  #magic-bottom {
+    background: linear-gradient(120deg, #f3f6fa 0%, #e6eaf2 100%);
+    border: 1.5px solid #d1d5db;
+    box-shadow: 0 4px 18px 0 rgba(79, 140, 255, 0.06), 0 1.5px 6px 0 rgba(0,0,0,0.07);
+  }
+
+  #magic-bottom button#magic-btn {
+    background: linear-gradient(90deg, #4f8cff 0%, #bcd6ff 100%);
+    color: #23272f;
+    box-shadow: 0 2px 8px rgba(79, 140, 255, 0.08);
+  }
+
+  #magic-bottom button#magic-btn:hover {
+    background: linear-gradient(90deg, #6eaaff 0%, #a3c8ff 100%);
+    box-shadow: 0 6px 24px rgba(79, 140, 255, 0.13);
+  }
+
+  #magic-bottom textarea {
+    background: #f3f6fa !important;
+    color: #23272f !important;
+    border: 2px solid #d1d5db !important;
+  }
+
+  #custom-prompt::placeholder {
+    color: #7b8794;
+    opacity: 1;
+    font-style: italic;
+  }
+}
