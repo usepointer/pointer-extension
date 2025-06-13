@@ -15,8 +15,6 @@ body {
   font-family: system-ui, sans-serif;
   padding: 1em 0.5em 0.5em 0.5em;
   box-sizing: border-box;
-  /* padding-bottom: 7em; */
-  /* Ensure content above fixed bottom bar */
 }
 
 #magic-btn {
@@ -114,71 +112,6 @@ body {
   /* Chrome, Safari, Opera */
 }
 
-#magic-result.has-data {
-  display: block;
-  border: 1.5px solid #3a3f4b;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-}
-
-.loading-container {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 60px;
-  width: 100%;
-  /* Center absolutely in parent */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 20;
-}
-
-.spinner {
-  width: 32px;
-  height: 32px;
-  border: 4px solid #ccc;
-  border-top: 4px solid #0078d7;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 12px auto 8px auto;
-  display: block;
-}
-
-.loading-text {
-  color: #555;
-  font-size: 1rem;
-  text-align: center;
-  margin-bottom: 8px;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.text-animate {
-  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 #custom-prompt {
   background: #23272b !important;
   color: #e6e6e6 !important;
@@ -205,12 +138,9 @@ body {
 }
 
 #magic-bottom {
-  /* position: fixed; */
   bottom: 0;
   left: 0;
   width: 100%;
-  /* background: #18181b; */
-  /* box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.15); */
   padding: 0.5em 0.5em 0.5em 0.5em;
   z-index: 10;
   display: flex;
@@ -339,11 +269,6 @@ body {
   label[for="custom-prompt"] {
     color: #e6e6e6;
   }
-
-  .loading-container {
-    background: #23272b;
-    color: #e6e6e6;
-  }
 }
 
 /* Light mode support */
@@ -372,12 +297,7 @@ body {
   label[for="custom-prompt"] {
     color: #23272f;
   }
-
-  .loading-container {
-    background: #f7f8fa;
-    color: #23272f;
-  }
-
+  
   #magic-bottom {
     background: linear-gradient(120deg, #f3f6fa 0%, #e6eaf2 100%);
     border: 1.5px solid #d1d5db;
