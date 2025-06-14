@@ -12,6 +12,7 @@
     "build:prod": "vite build --mode prod && tsc"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@types/chrome": "^0.0.326",
     "@types/node": "^22.15.29",
     "typescript": "^5.8.3",
