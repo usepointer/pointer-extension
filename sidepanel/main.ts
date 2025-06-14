@@ -1,6 +1,6 @@
-import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton } from './domUtils';
-import { getCurrentTab, extractTabTextContent } from './tabUtils';
-import { streamAndRenderMarkdown } from './streamUtils';
+import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton } from './utils/domUtils';
+import { getCurrentTab, extractTabTextContent } from './utils/tabUtils';
+import { streamAndRenderMarkdown } from './utils/streamUtils';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST
 
