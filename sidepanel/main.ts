@@ -18,7 +18,7 @@ function showBackendError(div: HTMLElement) {
 
 // Main event handler
 async function onMagicButtonClick() {
-    const resultDiv = document.getElementById('magic-result');
+    const resultDiv = document.getElementById('conversation');
     setButtonLoadingState(true);
     resetResultDiv(resultDiv);
     const customPromptInput = document.getElementById('custom-prompt') as HTMLTextAreaElement | null;

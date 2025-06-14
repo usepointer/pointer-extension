@@ -1,14 +1,17 @@
 <link rel="stylesheet" href="css/index.css">
-<div id="magic-result"></div>
-<div id="magic-bottom">
-    <div style="margin-top: 0;">
-        <textarea id="custom-prompt" rows="3" placeholder="Ask a question about this webpage..."></textarea>
-    </div>
-    <button id="magic-btn">
-        <img src="svg/magic-wand.svg" alt="Magic wand icon" width="22" height="22" />
-        <span class="btn-text">Ask Pointer</span>
-        <span class="loading-dots" style="font-size:2em; display:none"><span class="dot">.</span><span
-                class="dot">.</span><span class="dot">.</span></span>
-    </button>
-</div>
 <script type="module" src="main.ts"></script>
+
+<div id="container" class="flex flex-col h-full gap-2">
+    <div id="conversation" class="grow overflow-y-auto scroll-auto border-1 border-solid border-indigo-500"></div>
+    <div id="user-input" class="grow-0 p-2 flex">
+        <div>
+            <textarea id="custom-prompt" rows="3" placeholder="Ask a question about this webpage..."></textarea>
+        </div>
+        <button id="magic-btn">
+            <img src="svg/magic-wand.svg" alt="Magic wand icon" width="22" height="22" />
+            <span class="btn-text">Ask Pointer</span>
+            <span class="loading-dots" style="font-size:2em; display:none"><span class="dot">.</span><span
+                    class="dot">.</span><span class="dot">.</span></span>
+        </button>
+    </div>
+</div>

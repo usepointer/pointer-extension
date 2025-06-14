@@ -4,11 +4,11 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "vite build --mode dev && tsc",
+    "build": "tsc --watch & vite --watch build --mode dev",
     "build:prod": "vite build --mode prod && tsc"
   },
   "devDependencies": {
@@ -19,6 +19,8 @@
     "vite-plugin-static-copy": "^3.0.0"
   },
   "dependencies": {
-    "marked": "^15.0.12"
+    "@tailwindcss/vite": "^4.1.10",
+    "marked": "^15.0.12",
+    "tailwindcss": "^4.1.10"
   }
 }
