@@ -55,3 +55,9 @@ async function onMagicButtonClick() {
 }
 
 document.addEventListener('DOMContentLoaded', () => setupMagicButton(onMagicButtonClick));
+
+const textArea = document.getElementById('custom-prompt') as HTMLInputElement;
+textArea.addEventListener("input", () => {
+    const submitButton = document.getElementById('magic-btn') as HTMLButtonElement;
+    submitButton.disabled = textArea.value.trim() === "";
+});
