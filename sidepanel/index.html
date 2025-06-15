@@ -9,15 +9,29 @@
         </div> -->
     </div>
     <div id="user-input" class="shadow-xl
- grow-0 m-2 p-2 mb-3 flex items-center border-1 border-solid border-gray-300 rounded-2xl dark:border-none dark:shadow-none dark:bg-neutral-600">
-        <textarea class="grow resize-none outline-none prose-sm p-2" id="custom-prompt" rows="2"
+                                grow-0 m-2 p-2 mb-3
+                                grid grid-cols-2 
+                                items-center 
+                                border-1 border-solid border-gray-300 rounded-2xl 
+                                dark:border-none dark:shadow-none dark:bg-neutral-600">
+        <textarea class="col-span-2 grow resize-none outline-none prose-sm p-2" id="custom-prompt" rows="1"
             placeholder="Ask a question about this webpage..."></textarea>
-        <button id="magic-btn"
-            class="w-8 h-8 items-center justify-center flex
+
+        <button id="new-conversation" class="w-8 h-8 items-center justify-center flex
+            dark:hover:bg-neutral-500 dark:disabled:bg-neutral-400
+            hover:bg-neutral-200 disabled:bg-neutral-200
+            rounded-full ml-1">
+            <img src="svg/new-chat-white.svg" class="hidden dark:block" width=" 15" height="5" />
+            <img src="svg/new-chat.svg" class="block dark:hidden" width="15" height="5" />
+
+        </button>
+        <button id="magic-btn" class="w-8 h-8 items-center justify-center justify-self-end flex
             dark:bg-neutral-100 dark:hover:bg-neutral-400 dark:disabled:bg-neutral-400
             bg-neutral-500 hover:bg-neutral-200 disabled:bg-neutral-200
-            rounded-full" disabled>
-            <img src="svg/up-arrow.svg" class="stroke-2" alt="Magic wand icon" width="15" height="5"/>
+            rounded-full mr-1" disabled>
+            <img src="svg/up-arrow.svg" width="15" height="5" />
         </button>
+
+
     </div>
 </div>

@@ -1,4 +1,4 @@
-import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput, getCustomPrompt } from './utils/domUtils';
+import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput, getCustomPrompt, setupNewConversationButton } from './utils/domUtils';
 import { getCurrentTab, extractTabTextContent } from './utils/tabUtils';
 import { streamAndRenderMarkdown } from './utils/streamUtils';
 
@@ -19,7 +19,7 @@ function showBackendError(div: HTMLElement) {
 // Main event handler
 async function onMagicButtonClick() {
     const resultDiv = document.getElementById('conversation');
-    setButtonLoadingState(true);    
+    setButtonLoadingState(true);
     const customPrompt = getCustomPrompt()
     resetPromptInput()
     const currentTab = await getCurrentTab();
@@ -57,10 +57,12 @@ async function onMagicButtonClick() {
             await handleNoContent(resultDiv);
         }
     }
-    setButtonLoadingState(false);
 }
 
-document.addEventListener('DOMContentLoaded', () => setupMagicButton(onMagicButtonClick));
+document.addEventListener('DOMContentLoaded', () => {
+    setupMagicButton(onMagicButtonClick)
+    setupNewConversationButton(resetResultDiv)
+});
 
 const textArea = document.getElementById('custom-prompt') as HTMLInputElement;
 textArea.addEventListener("input", () => {

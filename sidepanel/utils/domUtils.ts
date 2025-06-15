@@ -1,10 +1,8 @@
 // DOM manipulation helpers
-export function resetResultDiv(resultDiv: HTMLElement | null) {
-    if (resultDiv) {
-        resultDiv.style.display = '';
-        resultDiv.textContent = '';
-        resultDiv.classList.remove('has-data', 'loading');
-    }
+export function resetResultDiv() {
+    console.log('Reseting conversations')
+    const resultDiv = document.getElementById('conversation');
+    resultDiv.innerHTML = ''
 }
 
 export function resetPromptInput() {
@@ -34,6 +32,13 @@ export function setButtonLoadingState(isLoading: boolean) {
 
 export function setupMagicButton(onClick: () => void) {
     const btn = document.getElementById('magic-btn');
+    if (btn) {
+        btn.addEventListener('click', onClick);
+    }
+}
+
+export function setupNewConversationButton(onClick: () => void) {
+    const btn = document.getElementById('new-conversation');
     if (btn) {
         btn.addEventListener('click', onClick);
     }
