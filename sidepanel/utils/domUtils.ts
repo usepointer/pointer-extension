@@ -7,8 +7,17 @@ export function resetResultDiv(resultDiv: HTMLElement | null) {
     }
 }
 
-export function resetPromptInput(textArea: HTMLTextAreaElement) {
+export function resetPromptInput() {
+    const textArea = document.getElementById('custom-prompt') as HTMLTextAreaElement
+    const submitButton = document.getElementById('magic-btn') as HTMLButtonElement;
     textArea.value = ''
+    submitButton.disabled = true;
+    textArea.focus()
+}
+
+export function getCustomPrompt() {
+    const customPromptInput = document.getElementById('custom-prompt') as HTMLTextAreaElement | null;
+    return customPromptInput.value || '';
 }
 
 export async function handleNoContent(resultDiv: HTMLElement) {

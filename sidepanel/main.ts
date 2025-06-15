@@ -1,4 +1,4 @@
-import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput } from './utils/domUtils';
+import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput, getCustomPrompt } from './utils/domUtils';
 import { getCurrentTab, extractTabTextContent } from './utils/tabUtils';
 import { streamAndRenderMarkdown } from './utils/streamUtils';
 
@@ -19,11 +19,9 @@ function showBackendError(div: HTMLElement) {
 // Main event handler
 async function onMagicButtonClick() {
     const resultDiv = document.getElementById('conversation');
-    setButtonLoadingState(true);
-    //resetResultDiv(resultDiv); 
-    const customPromptInput = document.getElementById('custom-prompt') as HTMLTextAreaElement | null;
-    const customPrompt = customPromptInput ? customPromptInput.value : '';
-    resetPromptInput(customPromptInput)
+    setButtonLoadingState(true);    
+    const customPrompt = getCustomPrompt()
+    resetPromptInput()
     const currentTab = await getCurrentTab();
     if (!currentTab) {
         if (resultDiv) await handleNoContent(resultDiv);
