@@ -7,6 +7,10 @@ export function resetResultDiv(resultDiv: HTMLElement | null) {
     }
 }
 
+export function resetPromptInput(textArea: HTMLTextAreaElement) {
+    textArea.value = ''
+}
+
 export async function handleNoContent(resultDiv: HTMLElement) {
     resultDiv.textContent = '';
     resultDiv.classList.remove('has-data', 'loading');

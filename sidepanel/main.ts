@@ -1,4 +1,4 @@
-import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton } from './utils/domUtils';
+import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput } from './utils/domUtils';
 import { getCurrentTab, extractTabTextContent } from './utils/tabUtils';
 import { streamAndRenderMarkdown } from './utils/streamUtils';
 
@@ -20,9 +20,10 @@ function showBackendError(div: HTMLElement) {
 async function onMagicButtonClick() {
     const resultDiv = document.getElementById('conversation');
     setButtonLoadingState(true);
-    resetResultDiv(resultDiv);
+    //resetResultDiv(resultDiv); 
     const customPromptInput = document.getElementById('custom-prompt') as HTMLTextAreaElement | null;
     const customPrompt = customPromptInput ? customPromptInput.value : '';
+    resetPromptInput(customPromptInput)
     const currentTab = await getCurrentTab();
     if (!currentTab) {
         if (resultDiv) await handleNoContent(resultDiv);
@@ -37,14 +38,21 @@ async function onMagicButtonClick() {
     if (resultDiv) {
         if (contents) {
             try {
+                const inputMessageDiv = document.createElement('div');
+                inputMessageDiv.setAttribute('class', 'justify-self-end dark:bg-neutral-600 bg-neutral-200 rounded-2xl p-2 m-3 max-w-3xs')
+                inputMessageDiv.innerHTML = customPrompt
+                const responseMessageDiv = document.createElement('article');
+                resultDiv.append(inputMessageDiv)
+                resultDiv.append(responseMessageDiv)
                 const response = await fetch(`${backendHost}/insights`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
                     body: JSON.stringify({ htmlContent: contents, customPrompt })
                 });
                 if (!response.ok) throw new Error('Backend error');
-                await streamAndRenderMarkdown(response, resultDiv);
+                await streamAndRenderMarkdown(response, responseMessageDiv);
             } catch (err) {
+                console.error(err)
                 showBackendError(resultDiv);
             }
         } else {

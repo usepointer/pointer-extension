@@ -1,8 +1,13 @@
 <link rel="stylesheet" href="css/index.css">
 <script type="module" src="main.ts"></script>
 
-<div id="container" class="flex flex-col h-full gap-2 dark:bg-neutral-700 prose dark:prose-invert">
-    <div id="conversation" class="p-2 grow overflow-y-auto scroll-auto"></div>
+<div id="container" class="flex flex-col h-full gap-2 dark:bg-neutral-700 prose dark:prose-invert font-light text-sm">
+    <div id="conversation" class="p-2 grow overflow-y-auto scroll-auto flex-col">
+        <!-- Test Div -->
+        <!-- <div id="userMessage" class="justify-self-end dark:bg-neutral-600 rounded-2xl p-2 m-3 max-w-3xs">
+            Summarize this page, This is a long long description for you to follow, here are some more words
+        </div> -->
+    </div>
     <div id="user-input" class="shadow-xl
  grow-0 m-2 p-2 mb-3 flex items-center border-1 border-solid border-gray-300 rounded-2xl dark:border-none dark:shadow-none dark:bg-neutral-600">
         <textarea class="grow resize-none outline-none prose-sm p-2" id="custom-prompt" rows="2"
