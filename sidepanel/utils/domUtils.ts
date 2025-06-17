@@ -31,14 +31,19 @@ export function setButtonLoadingState(isLoading: boolean) {
 }
 
 export function setupMagicButton(onClick: () => void) {
-    const btn = document.getElementById('magic-btn');
-    if (btn) {
-        btn.addEventListener('click', onClick);
-    }
+    setupButtonClick('magic-btn', onClick)
 }
 
 export function setupNewConversationButton(onClick: () => void) {
-    const btn = document.getElementById('new-conversation');
+    setupButtonClick('new-conversation', onClick)
+}
+
+export function setupAddTabsButton(onClick: () => void) {
+    setupButtonClick('add-tabs', onClick)
+}
+
+export function setupButtonClick(buttonId: string, onClick: () => void) {
+    const btn = document.getElementById(buttonId);
     if (btn) {
         btn.addEventListener('click', onClick);
     }

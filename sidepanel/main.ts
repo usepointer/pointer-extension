@@ -1,4 +1,4 @@
-import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput, getCustomPrompt, setupNewConversationButton } from './utils/domUtils';
+import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput, getCustomPrompt, setupNewConversationButton, setupAddTabsButton } from './utils/domUtils';
 import { getCurrentTab, extractTabTextContent } from './utils/tabUtils';
 import { streamAndRenderMarkdown } from './utils/streamUtils';
 
@@ -37,7 +37,8 @@ async function onMagicButtonClick() {
         if (contents) {
             try {
                 const inputMessageDiv = document.createElement('div');
-                inputMessageDiv.setAttribute('class', 'justify-self-end dark:bg-neutral-600 bg-neutral-200 rounded-2xl p-2 m-3 max-w-3xs')
+                const inputMessageClass = `justify-self-end dark:bg-neutral-600 bg-neutral-200 rounded-2xl p-2 m-3 max-w-3xs`
+                inputMessageDiv.setAttribute('class', inputMessageClass)
                 inputMessageDiv.innerHTML = customPrompt
                 const responseMessageDiv = document.createElement('article');
                 resultDiv.append(inputMessageDiv)
@@ -59,9 +60,15 @@ async function onMagicButtonClick() {
     }
 }
 
+async function onAddTabsButtonClick() {
+
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     setupMagicButton(onMagicButtonClick)
     setupNewConversationButton(resetResultDiv)
+    setupAddTabsButton(onAddTabsButtonClick)
+
 });
 
 const textArea = document.getElementById('custom-prompt') as HTMLInputElement;
