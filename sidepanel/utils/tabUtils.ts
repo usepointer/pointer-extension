@@ -5,6 +5,12 @@ export async function getCurrentTab() {
     return tab;
 }
 
+export async function getOpenTabs(): Promise<chrome.tabs.Tab[]> {
+    let queryOptions = { lastFocusedWindow: true }
+    const tabs = await chrome.tabs.query(queryOptions);
+    return tabs;
+}
+
 export function extractTabHTMLContent() {
     const parser = new DOMParser();
     const doc = parser.parseFromString(document.body.outerHTML, 'text/html');

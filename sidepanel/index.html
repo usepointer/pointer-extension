@@ -8,12 +8,35 @@
             Summarize this page, This is a long long description for you to follow, here are some more words
         </div> -->
     </div>
+
     <div id="user-input" class="shadow-xl
                                 grow-0 m-2 p-2 mb-3
                                 grid grid-cols-2 
                                 items-center 
                                 border-1 border-solid border-gray-300 rounded-2xl 
-                                dark:border-none dark:shadow-none dark:bg-neutral-700">
+                                dark:border-none dark:shadow-none dark:bg-neutral-700
+                                relative">
+        <div id="tabs-selection" class="absolute bottom-25 left-0
+                    w-65 h-30
+                    shadow-xl
+                    border-1 border-solid border-gray-300 rounded-2xl 
+                    dark:border-none dark:shadow-none dark:bg-neutral-700
+                    rounded-md
+                    grow overflow-y-auto scroll-auto flex-col
+                    p-2
+                    hidden
+                    ">
+            <div
+                class="flex items-center h-8 hover:bg-neutral-200 dark:hover:bg-neutral-500 m-1 rounded-xl gap-2 cursor-pointer select-none ">
+                <span>
+                    <img src="https://static.whatsapp.net/rsrc.php/v4/yP/r/rYZqPCBaG70.png" class="w-7 align-top" />
+                </span>
+                <span class="truncate" title="Whatsapp this is a long and another text that will overflow">
+                    Whatsapp this is a long and another text that will overflow
+                </span>
+            </div>
+
+        </div>
         <textarea class="col-span-2 grow resize-none outline-none prose-sm p-2" id="custom-prompt" rows="1"
             placeholder="Ask a question about this webpage..."></textarea>
 
@@ -31,10 +54,8 @@
             dark:disabled:bg-neutral-400
             hover:bg-neutral-200
             disabled:bg-neutral-200
-            border 
-            border-neutral-200
-            dark:border-neutral-500
-            rounded-full ml-1">
+            rounded-full ml-1
+            cursor-pointer">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
                     aria-label="" class="mr-1">
                     <path
@@ -46,13 +67,14 @@
                 </span>
 
             </button>
-
         </div>
 
         <button id="magic-btn" class="w-8 h-8 items-center justify-center justify-self-end flex
             dark:bg-neutral-100 dark:hover:bg-neutral-400 dark:disabled:bg-neutral-400
             bg-neutral-500 hover:bg-neutral-200 disabled:bg-neutral-200
-            rounded-full mr-1" disabled>
+            rounded-full mr-1
+            cursor-pointer
+            disabled:cursor-not-allowed" disabled>
             <img src="svg/up-arrow.svg" width="15" height="5" />
         </button>
 
