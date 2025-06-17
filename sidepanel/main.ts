@@ -73,10 +73,16 @@ async function populateTabsSelection() {
     const tabsSelectionContainer = document.getElementById('tabs-selection')
     const openTabISelectionItems = tabsSelection.map(({ tab, selected }) => {
         const openTabSelectionItem = document.createElement('div');
-        const favIconImage = document.createElement('img')
-        favIconImage.src = tab.favIconUrl
-        favIconImage.classList.add('w-3', 'h-3')
-        openTabSelectionItem.append(favIconImage)
+        openTabSelectionItem.innerHTML += `<div
+                class="flex items-center h-8 hover:bg-neutral-200 dark:hover:bg-neutral-500 rounded-xl gap-2 cursor-pointer select-none p-2">
+                <input id="${tab.id}" type="checkbox">
+                <label for="${tab.id}" class="flex items-center h-8 w-50 gap-1">
+                    <img src="${tab.favIconUrl}" class="w-5 align-top" />
+                    <span class="truncate" title="${tab.title}">
+                        ${tab.title}
+                    </span>
+                </label>
+            </div>`
         return openTabSelectionItem
     })
 
@@ -87,7 +93,7 @@ async function populateTabsSelection() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // await populateTabsSelection()
+    await populateTabsSelection()
     setupMagicButton(onMagicButtonClick)
     setupNewConversationButton(resetResultDiv)
     setupAddTabsButton(onAddTabsButtonClick)
