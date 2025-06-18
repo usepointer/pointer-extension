@@ -38,15 +38,15 @@ export function setupNewConversationButton(onClick: () => void) {
     setupElemenetClick('new-conversation', onClick)
 }
 
-export function setupAddTabsButton(onClick: () => void) {
+export function setupAddTabsButton(onClick: (e: MouseEvent) => void) {
     setupElemenetClick('add-tabs', onClick)
 }
 
-export function setupTabCheckbox(tabId: number, onClick: (tabId: number) => void) {
-    setupElemenetClick(String(tabId), () => onClick(tabId))
+export function setupTabCheckbox(tabId: number, onClick: (tabId: number, e: MouseEvent) => void) {
+    setupElemenetClick(String(tabId), (e: MouseEvent) => onClick(tabId, e))
 }
 
-export function setupElemenetClick(elementId: string, onClick: (...args:any[]) => void) {
+export function setupElemenetClick(elementId: string, onClick: (...args: any[]) => void) {
     const elemenet = document.getElementById(elementId);
     if (elemenet) {
         elemenet.addEventListener('click', onClick);

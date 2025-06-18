@@ -38,9 +38,9 @@ async function onMagicButtonClick() {
         setButtonLoadingState(false);
         return;
     }
-   
+
     const contents = await prepareContent()
-    
+
     if (resultDiv) {
         if (contents) {
             try {
@@ -84,12 +84,14 @@ async function prepareContent(): Promise<TabContent[]> {
     return content;
 }
 
-async function onAddTabsButtonClick() {
+async function onAddTabsButtonClick(e: MouseEvent) {
+    e.stopPropagation();
     const tabsSelectionContainer = document.getElementById('tabs-selection')
     tabsSelectionContainer.classList.toggle('hidden')
 }
 
-function onTabChecked(tabId: number) {
+function onTabChecked(tabId: number, e: MouseEvent) {
+    e.stopPropagation();
     const tab = tabsState.state.tabs.find(({ id }) => id === tabId);
     tab.selected = !tab.selected
     tabsState.setState(tabsState.state)
@@ -121,6 +123,19 @@ function populateTabsSelection(tabsState: TabsState) {
     })
 }
 
+document.addEventListener('click', outsideClickListener)
+
+document.addEventListener('keydown', (e: KeyboardEvent) => {
+    const tabsSelectionContainer = document.getElementById('tabs-selection')
+    const customPrompt = document.getElementById('custom-prompt') as HTMLTextAreaElement
+    if (e.key === 'Escape') {
+        if (!tabsSelectionContainer.classList.contains('hidden')) {
+            tabsSelectionContainer.classList.add('hidden')
+            customPrompt.focus();
+        }
+    }
+})
+
 document.addEventListener('DOMContentLoaded', async () => {
     const tabs = await getOpenTabs();
     const activeTab = await getCurrentTab();
@@ -135,6 +150,13 @@ textArea.addEventListener("input", () => {
     const submitButton = document.getElementById('magic-btn') as HTMLButtonElement;
     submitButton.disabled = textArea.value.trim() === "";
 });
+
+function outsideClickListener(e: MouseEvent) {
+    const tabsSelectionContainer = document.getElementById('tabs-selection')
+    if (!tabsSelectionContainer.contains(e.target as Node)) {
+        tabsSelectionContainer.classList.add('hidden')
+    }
+}
 
 chrome.tabs.onActivated.addListener(({ tabId, windowId }) => {
     tabsState.setState({ activeTabId: tabId })
