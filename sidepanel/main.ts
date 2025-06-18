@@ -1,11 +1,17 @@
-import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput, getCustomPrompt, setupNewConversationButton, setupAddTabsButton } from './utils/domUtils';
+import { resetResultDiv, handleNoContent, setButtonLoadingState, setupMagicButton, resetPromptInput, getCustomPrompt, setupNewConversationButton, setupAddTabsButton, setupTabCheckbox } from './utils/domUtils';
 import { getCurrentTab, extractTabTextContent, getOpenTabs } from './utils/tabUtils';
 import { streamAndRenderMarkdown } from './utils/streamUtils';
+import { State } from './state/base.state';
 
 const backendHost = import.meta.env.VITE_BACKEND_HOST
 
-let tabsSelection: { tabId: number, tab: chrome.tabs.Tab, selected: boolean }[] = [];
-let activeTabId: number | null;
+type TabsState = {
+    tabs: { id: number, title: string, favIconUrl: string, selected: boolean }[],
+    activeTabId: number
+}
+
+const tabsState = new State<TabsState>();
+tabsState.subscribe(populateTabsSelection)
 // Helper to show error message with icon
 function showBackendError(div: HTMLElement) {
     div.innerHTML = `
@@ -67,33 +73,42 @@ async function onAddTabsButtonClick() {
     tabsSelectionContainer.classList.toggle('hidden')
 }
 
-async function populateTabsSelection() {
-    const openTabs = await getOpenTabs()
-    tabsSelection = openTabs.map(tab => ({ tabId: tab.id, tab, selected: false }))
+function onTabChecked(tabId: number) {
+    const tab = tabsState.state.tabs.find(({ id }) => id === tabId);
+    tab.selected = !tab.selected
+    tabsState.setState(tabsState.state)
+}
+
+function populateTabsSelection(tabsState: TabsState) {
+    console.log('populating tabs selection')
     const tabsSelectionContainer = document.getElementById('tabs-selection')
-    const openTabISelectionItems = tabsSelection.map(({ tab, selected }) => {
+    const openTabISelectionItems = tabsState.tabs.map(({ id: tabId, favIconUrl: iconUrl, selected, title }) => {
+        const isActiveTab = tabId === tabsState.activeTabId
         const openTabSelectionItem = document.createElement('div');
         openTabSelectionItem.innerHTML += `<div
                 class="flex items-center h-8 hover:bg-neutral-200 dark:hover:bg-neutral-500 rounded-xl gap-2 cursor-pointer select-none p-2">
-                <input id="${tab.id}" type="checkbox">
-                <label for="${tab.id}" class="flex items-center h-8 w-50 gap-1">
-                    <img src="${tab.favIconUrl}" class="w-5 align-top" />
-                    <span class="truncate" title="${tab.title}">
-                        ${tab.title}
+                <input id="${tabId}" type="checkbox" ${selected || isActiveTab ? "checked" : ""}>
+                <label for="${tabId}" class="flex items-center h-8 w-50 gap-1">
+                    <img src="${iconUrl}" class="w-5 align-top" />
+                    <span class="truncate" title="${title}">
+                        ${title}
                     </span>
                 </label>
             </div>`
+
         return openTabSelectionItem
     })
-
-    const { id: tabId } = await getCurrentTab();
-    setActiveTab(tabId)
-
+    tabsSelectionContainer.innerHTML = ''
     tabsSelectionContainer.append(...openTabISelectionItems)
+    tabsState.tabs.forEach(({ id }) => {
+        setupTabCheckbox(id, onTabChecked)
+    })
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await populateTabsSelection()
+    const tabs = await getOpenTabs();
+    const activeTab = await getCurrentTab();
+    tabsState.setState({ tabs: tabs.map(({ id, title, favIconUrl }) => ({ id, title, favIconUrl, selected: false })), activeTabId: activeTab.id })
     setupMagicButton(onMagicButtonClick)
     setupNewConversationButton(resetResultDiv)
     setupAddTabsButton(onAddTabsButtonClick)
@@ -106,10 +121,25 @@ textArea.addEventListener("input", () => {
 });
 
 chrome.tabs.onActivated.addListener(({ tabId, windowId }) => {
-    setActiveTab(tabId)
+    tabsState.setState({ activeTabId: tabId })
 });
 
-function setActiveTab(tabId: number) {
-    activeTabId = tabId;
-    tabsSelection.find(tab => tab.tabId === activeTabId).selected = true;
-}
+chrome.tabs.onUpdated.addListener((tabId, changedInfo, tab) => {
+    if (changedInfo.status === 'complete') {
+        const tabs = tabsState.state.tabs;
+        const updatedTab = tabs.find(({ id }) => id === tabId);
+        if (!updatedTab) {
+            tabs.push({ id: tab.id, favIconUrl: tab.favIconUrl, title: tab.title, selected: false })
+        } else {
+            updatedTab.favIconUrl = tab.favIconUrl;
+            updatedTab.title = tab.title
+        }
+        tabsState.setState({ tabs })
+
+    }
+})
+
+chrome.tabs.onRemoved.addListener((tabId) => {
+    const filteredTabs = tabsState.state.tabs.filter(({ id }) => id !== tabId)
+    tabsState.setState({ tabs: filteredTabs })
+})

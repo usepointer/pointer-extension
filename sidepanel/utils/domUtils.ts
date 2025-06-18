@@ -31,20 +31,24 @@ export function setButtonLoadingState(isLoading: boolean) {
 }
 
 export function setupMagicButton(onClick: () => void) {
-    setupButtonClick('magic-btn', onClick)
+    setupElemenetClick('magic-btn', onClick)
 }
 
 export function setupNewConversationButton(onClick: () => void) {
-    setupButtonClick('new-conversation', onClick)
+    setupElemenetClick('new-conversation', onClick)
 }
 
 export function setupAddTabsButton(onClick: () => void) {
-    setupButtonClick('add-tabs', onClick)
+    setupElemenetClick('add-tabs', onClick)
 }
 
-export function setupButtonClick(buttonId: string, onClick: () => void) {
-    const btn = document.getElementById(buttonId);
-    if (btn) {
-        btn.addEventListener('click', onClick);
+export function setupTabCheckbox(tabId: number, onClick: (tabId: number) => void) {
+    setupElemenetClick(String(tabId), () => onClick(tabId))
+}
+
+export function setupElemenetClick(elementId: string, onClick: (...args:any[]) => void) {
+    const elemenet = document.getElementById(elementId);
+    if (elemenet) {
+        elemenet.addEventListener('click', onClick);
     }
 }
