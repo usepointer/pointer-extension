@@ -8,7 +8,8 @@ export async function getCurrentTab() {
 export async function getOpenTabs(): Promise<chrome.tabs.Tab[]> {
     let queryOptions = { lastFocusedWindow: true }
     const tabs = await chrome.tabs.query(queryOptions);
-    return tabs;
+    
+    return tabs.filter(tab => tab.url);
 }
 
 export function extractTabHTMLContent() {

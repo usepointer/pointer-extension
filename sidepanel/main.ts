@@ -167,7 +167,9 @@ chrome.tabs.onUpdated.addListener((tabId, changedInfo, tab) => {
         const tabs = tabsState.state.tabs;
         const updatedTab = tabs.find(({ id }) => id === tabId);
         if (!updatedTab) {
-            tabs.push({ id: tab.id, favIconUrl: tab.favIconUrl, title: tab.title, selected: false })
+            if (tab.url) {
+                tabs.push({ id: tab.id, favIconUrl: tab.favIconUrl, title: tab.title, selected: false })
+            }
         } else {
             updatedTab.favIconUrl = tab.favIconUrl;
             updatedTab.title = tab.title
