@@ -10,6 +10,8 @@ type TabsState = {
     activeTabId: number
 }
 
+type TabContent = { tabTitle: string, content: string[] }
+
 const tabsState = new State<TabsState>();
 tabsState.subscribe(populateTabsSelection)
 // Helper to show error message with icon
@@ -36,11 +38,9 @@ async function onMagicButtonClick() {
         setButtonLoadingState(false);
         return;
     }
-    // Get current tab html content
-    const [{ result: contents }] = await chrome.scripting.executeScript({
-        target: { tabId: currentTab.id },
-        func: extractTabTextContent
-    });
+   
+    const contents = await prepareContent()
+    
     if (resultDiv) {
         if (contents) {
             try {
@@ -66,6 +66,22 @@ async function onMagicButtonClick() {
             await handleNoContent(resultDiv);
         }
     }
+}
+
+async function prepareContent(): Promise<TabContent[]> {
+    const tabIdsSet = new Set(tabsState.state.tabs.filter(({ selected }) => selected).map(({ id }) => id));
+    tabIdsSet.add(tabsState.state.activeTabId);
+    const content: TabContent[] = [];
+    for (const tabId of tabIdsSet) {
+        const [{ result: tabContent }] = await chrome.scripting.executeScript({
+            target: { tabId },
+            func: extractTabTextContent
+        });
+        const tabTitle = tabsState.state.tabs.find(({ id }) => id === tabId).title
+        content.push({ tabTitle, content: tabContent })
+    }
+
+    return content;
 }
 
 async function onAddTabsButtonClick() {
