@@ -104,9 +104,9 @@ function populateTabsSelection(tabsState: TabsState) {
         const isActiveTab = tabId === tabsState.activeTabId
         const openTabSelectionItem = document.createElement('div');
         openTabSelectionItem.innerHTML += `<div
-                class="flex items-center h-8 hover:bg-neutral-200 dark:hover:bg-neutral-500 rounded-xl gap-2 cursor-pointer select-none p-2">
-                <input id="${tabId}" type="checkbox" ${selected || isActiveTab ? "checked" : ""}>
-                <label for="${tabId}" class="flex items-center h-8 w-50 gap-1">
+                class="flex items-center h-8 hover:bg-neutral-200 dark:hover:bg-neutral-500 rounded-xl gap-2 cursor-pointer select-none p-2 ${isActiveTab && "pointer-events-none opacity-50 select-none"}">
+                <input id="${tabId}" type="checkbox" ${selected || isActiveTab ? "checked" : ""} class="cursor-pointer">
+                <label for="${tabId}" class="flex items-center h-8 w-50 gap-1 cursor-pointer">
                     <img src="${iconUrl}" class="w-5 align-top" />
                     <span class="truncate" title="${title}">
                         ${title}
