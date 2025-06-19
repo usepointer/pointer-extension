@@ -145,10 +145,15 @@ function populateTabsSelection(tabsState: TabsState) {
         return openTabSelectionItem
     })
     tabsSelectionContainer.innerHTML = ''
-    tabsSelectionContainer.append(...openTabISelectionItems)
-    tabsState.tabs.forEach(({ id }) => {
-        setupTabCheckbox(id, onTabChecked)
-    })
+    if (openTabISelectionItems.length) {
+        tabsSelectionContainer.append(...openTabISelectionItems)
+        tabsState.tabs.forEach(({ id }) => {
+            setupTabCheckbox(id, onTabChecked)
+        })
+    } else {
+        tabsSelectionContainer.innerHTML = `<div class="self-center justify-self-center prose-lg">No Active Tabs</div>`
+    }
+
 }
 
 document.addEventListener('click', outsideClickListener)
