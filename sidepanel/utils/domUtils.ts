@@ -46,6 +46,10 @@ export function setupTabCheckbox(tabId: number, onClick: (tabId: number, e: Mous
     setupElemenetClick(String(tabId), (e: MouseEvent) => onClick(tabId, e))
 }
 
+export function setupCopyResponseButton(responseId: string, textResponse: string, onClick: (resonseId: string, textResponse: string) => void) {
+    setupElemenetClick(`${responseId}`, () => onClick(responseId, textResponse))
+}
+
 export function setupElemenetClick(elementId: string, onClick: (...args: any[]) => void) {
     const elemenet = document.getElementById(elementId);
     if (elemenet) {

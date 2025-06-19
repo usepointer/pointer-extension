@@ -1,7 +1,7 @@
 import { marked } from 'marked';
 
 // Streaming and rendering helpers
-export async function streamAndRenderMarkdown(response: Response, resultDiv: HTMLElement) {
+export async function streamAndRenderMarkdown(response: Response, resultDiv: HTMLElement): Promise<string> {
     const reader = response.body.getReader();
     const decoder = new TextDecoder('utf-8');
     const dataPrefix = 'data: '
@@ -25,4 +25,6 @@ export async function streamAndRenderMarkdown(response: Response, resultDiv: HTM
             }
         }
     }
+
+    return resultText;
 }
